@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProtectBlock</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="ok">Reportar</string>
+    <string name="cancel">Cancelar</string>
+    
+    <string name="report_prompt">Escoja motivo</string>
+    <string-array name="report_arrays">
+        <item>Robo</item>
+        <item>Pandillas</item>
+        <item>Presencia policial</item>
+        <item>Venta de drogas</item>
+        <item>Disturbios</item>
+        <item>Poca Iluminación</item>
+    </string-array>
+
+</resources>
