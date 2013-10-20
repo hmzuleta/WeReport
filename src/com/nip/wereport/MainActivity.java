@@ -55,7 +55,8 @@ public class MainActivity extends FragmentActivity {
 		map.setMyLocationEnabled(true);
 		//Desactiva la rotacion del mapa
 		map.getUiSettings().setRotateGesturesEnabled(false);
-		System.out.println("Duracion: "+Toast.LENGTH_LONG);
+		
+		//Toasts de bienvenida e instrucciones
 		Toast.makeText(this, "Bienvenido a WeReport",  Toast.LENGTH_LONG).show();
 		Toast bienvenida = Toast.makeText(this, "Toque una calle y luego la dirección para hacer un reporte",  Toast.LENGTH_LONG);
 		bienvenida.show();
