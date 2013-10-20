@@ -36,9 +36,14 @@ import com.nip.protectblock.R;
 
 public class MainActivity extends FragmentActivity {
 
+	/**
+	 * Constante para los límites geográficos de la cámara inicial; bogotá.
+	 */
 	private LatLngBounds BOGOTA = new LatLngBounds(new LatLng(4.59354,-74.26964), new LatLng(4.79952,-73.98262));
 
-
+	//-----------------------------------
+	// Constructor del fragment
+	//-----------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +52,6 @@ public class MainActivity extends FragmentActivity {
 
 		final GoogleMap map = ((SupportMapFragment)  getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 		//para que solo muestre a bogota
-
 		map.setMyLocationEnabled(true);
 		//Desactiva la rotacion del mapa
 		map.getUiSettings().setRotateGesturesEnabled(false);
@@ -55,6 +59,10 @@ public class MainActivity extends FragmentActivity {
 		Toast.makeText(this, "Bienvenido a WeReport",  Toast.LENGTH_LONG).show();
 		Toast bienvenida = Toast.makeText(this, "Toque una calle y luego la dirección para hacer un reporte",  Toast.LENGTH_LONG);
 		bienvenida.show();
+		
+		//----------------------------------
+		// Setup del click listener
+		//----------------------------------
 		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 			Marker marker;
 			Polyline p;
@@ -63,6 +71,7 @@ public class MainActivity extends FragmentActivity {
 				//Remueve el marcador si ya existe, y crea otro nuevo
 				if(marker!=null)
 					marker.remove();
+				//TODO: Implementar Thread para que el mapa no se traba mientras encuentra la calle
 				Toast.makeText(getApplicationContext(), "Identificando calle...", Toast.LENGTH_LONG).show();
 				List<Address> a = getAddress(point); 
 				if (a != null){
@@ -82,7 +91,11 @@ public class MainActivity extends FragmentActivity {
 				
 			}
 		});
-
+		
+		
+		//----------------------------------
+		// Setup de la camara del mapa
+		//----------------------------------
 		map.setOnCameraChangeListener(new OnCameraChangeListener() {
 
 			@Override
@@ -94,6 +107,10 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 		
+		
+		//-----------------------------------
+		// Creación del dialogo para reportar
+		//-----------------------------------	
 		AlertDialog.Builder builder = new AlertDialog.Builder( new ContextThemeWrapper(this, android.R.style.Theme_Holo));
 		builder.setMessage("¿Qué pasó?")
 				.setTitle("Reporte")	
@@ -110,7 +127,9 @@ public class MainActivity extends FragmentActivity {
 				        	   
 				           }
 				       });
-		
+		//-------------------------------------
+		// Creación del spinner para el dialogo
+		//-------------------------------------
 		Context mContext = this;
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.spinner1,null);
@@ -156,7 +175,7 @@ public class MainActivity extends FragmentActivity {
 			//Saca "numCalle1" y "a numCalle2"
 			String[] addressSplit2 = addressSplit[1].split(" a ");
 
-			//Primera direcciï¿½n para el polyline
+			//Primera direccion para el polyline
 			addressA=addressSplit[0]+"-"+addressSplit2[0]+", Bogotá";
 			LatLng a = getLatLongFromAddress(addressA);
 			addressB=addressSplit[0]+"-"+addressSplit[2]+", Bogotá";
@@ -174,6 +193,11 @@ public class MainActivity extends FragmentActivity {
 		return p;
 	}
 
+	/**
+	 * Obtiene el LatLng de una dirección
+	 * @param address La dirección a convertir
+	 * @return Latitud y Longitud de la dirección
+	 */
 	private LatLng getLatLongFromAddress(String address)
 	{
 		LatLng p=null;
@@ -195,6 +219,11 @@ public class MainActivity extends FragmentActivity {
 		return p;
 	}
 
+	/**
+	 * Obtiene la dirección para un LatLng
+	 * @param point Latitud y longitud el punto cuya dirección se quiere encontrar
+	 * @return La primera dirección encontrada para el punto
+	 */
 	public List<Address> getAddress(LatLng point) {
 		try {
 			Geocoder geocoder;
