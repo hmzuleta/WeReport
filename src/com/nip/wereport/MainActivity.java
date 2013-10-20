@@ -52,8 +52,8 @@ public class MainActivity extends FragmentActivity {
 		//Desactiva la rotacion del mapa
 		map.getUiSettings().setRotateGesturesEnabled(false);
 		System.out.println("Duracion: "+Toast.LENGTH_LONG);
-		Toast.makeText(this, "Bienvenido a ProtectBlock",  Toast.LENGTH_LONG).show();
-		Toast bienvenida = Toast.makeText(this, "Toque una calle y luego la direccion para hacer un reporte",  Toast.LENGTH_LONG);
+		Toast.makeText(this, "Bienvenido a WeReport",  Toast.LENGTH_LONG).show();
+		Toast bienvenida = Toast.makeText(this, "Toque una calle y luego la dirección para hacer un reporte",  Toast.LENGTH_LONG);
 		bienvenida.show();
 		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 			Marker marker;
@@ -63,6 +63,7 @@ public class MainActivity extends FragmentActivity {
 				//Remueve el marcador si ya existe, y crea otro nuevo
 				if(marker!=null)
 					marker.remove();
+				Toast.makeText(getApplicationContext(), "Identificando calle...", Toast.LENGTH_LONG).show();
 				List<Address> a = getAddress(point); 
 				if (a != null){
 					marker= map.addMarker(new MarkerOptions().position(point)
@@ -72,9 +73,11 @@ public class MainActivity extends FragmentActivity {
 					//
 					if (p!=null)
 						p.remove();
-					p = crearPolyline(point, map);
-				}else{
-					Toast.makeText(getApplicationContext(), "Direccion no disponible para este punto", Toast.LENGTH_LONG).show();
+					p = crearPolyline(a, map);
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(), "Dirección no disponible para este punto", Toast.LENGTH_LONG).show();
 				}
 				
 			}
@@ -92,12 +95,12 @@ public class MainActivity extends FragmentActivity {
 		});
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder( new ContextThemeWrapper(this, android.R.style.Theme_Holo));
-		builder.setMessage("Seleccionar motivo")
+		builder.setMessage("¿Qué pasó?")
 				.setTitle("Reporte")	
 		
 				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 				           public void onClick(DialogInterface dialog, int id) {
-				               // User clicked OK button
+				        	   Toast.makeText(getApplicationContext(), "Se reportó la calle!", Toast.LENGTH_LONG).show();
 				           }
 				       })
 					.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -131,10 +134,9 @@ public class MainActivity extends FragmentActivity {
 		
 	}
 
-	private Polyline crearPolyline(LatLng point, GoogleMap map) {
-		
-		List<Address> adlist = getAddress(point);
-		Address ad = adlist.get(0);
+	private Polyline crearPolyline(List<Address> a2, GoogleMap map) {
+
+		Address ad = a2.get(0);
 		String address = ad.getAddressLine(0);
 		System.out.println(address);
 
@@ -187,7 +189,8 @@ public class MainActivity extends FragmentActivity {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			Toast.makeText(getApplicationContext(), "El servicio de Google Maps no se encuentra disponible.\n"
+					+ "Intente más tarde.", Toast.LENGTH_LONG).show();
 		}
 		return p;
 	}
