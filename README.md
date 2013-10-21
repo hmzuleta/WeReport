@@ -18,8 +18,8 @@ Streets with old enough reports will have their default map color, as well. Howe
 
 What's there, so far
 --------------------
-![Alt text](https://www.dropbox.com/s/sxbsselvwl3j6ms/Screenshot_2013-10-20-21-32-24.png "Splashscreen")![Alt text](/path/to/img.jpg "Optional title")![Alt text](/path/to/img.jpg "Optional title")
-![Alt text](/path/to/img.jpg "Optional title")![Alt text](/path/to/img.jpg "Optional title")![Alt text](/path/to/img.jpg "Optional title")
+![Alt text](https://www.dropbox.com/s/sxbsselvwl3j6ms/Screenshot_2013-10-20-21-32-24.png "Splashscreen")![Alt text](/path/to/img.jpg "1")![Alt text](/path/to/img.jpg "2")
+![Alt text](/path/to/img.jpg "3")![Alt text](/path/to/img.jpg "4")![Alt text](/path/to/img.jpg "5")
 
 Who we are
 ------------
