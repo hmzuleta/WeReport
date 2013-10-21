@@ -25,6 +25,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -76,8 +78,9 @@ public class MainActivity extends FragmentActivity {
 				Toast.makeText(getApplicationContext(), "Identificando calle...", Toast.LENGTH_LONG).show();
 				List<Address> a = getAddress(point); 
 				if (a != null){
+					BitmapDescriptor bmd = BitmapDescriptorFactory.fromResource(R.drawable.pointer);
 					marker= map.addMarker(new MarkerOptions().position(point)
-							.title(a.get(0).getAddressLine(0)).snippet(getAddress(point).get(0).getAddressLine(1)+" - "+getAddress(point).get(0).getAddressLine(2)));
+							.title(a.get(0).getAddressLine(0)).snippet(getAddress(point).get(0).getAddressLine(1)+" - "+getAddress(point).get(0).getAddressLine(2)).icon(bmd));
 					marker.showInfoWindow();
 					getAddress(point);
 					//
