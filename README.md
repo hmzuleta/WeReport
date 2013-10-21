@@ -16,6 +16,10 @@ Red, for very dangerous streets. A considerable amount of dangerous activities w
 Streets without information will have their default map color.
 Streets with old enough reports will have their default map color, as well. However, the user will be able to see the report log for that street.
 
+What's there, so far
+--------------------
+![Alt text](https://www.dropbox.com/s/sxbsselvwl3j6ms/Screenshot_2013-10-20-21-32-24.png "Splashscreen")![Alt text](/path/to/img.jpg "Optional title")![Alt text](/path/to/img.jpg "Optional title")
+![Alt text](/path/to/img.jpg "Optional title")![Alt text](/path/to/img.jpg "Optional title")![Alt text](/path/to/img.jpg "Optional title")
 
 Who we are
 ------------
