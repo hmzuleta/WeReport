@@ -16,5 +16,7 @@
         <item>Disturbios</item>
         <item>Poca Iluminación</item>
     </string-array>
+    
+    <string name="pick_time">¿A qué horas pasó?</string>
 
 </resources>
