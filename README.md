@@ -1,5 +1,5 @@
 WeReport
-============
+------------
 
 Waze-ish app that helps users report criminal activity.
 Uses Google Maps to display your city and allows you to make reports on streets, whether they're suspicious or just safe.
@@ -22,3 +22,19 @@ Who we are
 
 We're NIP (Ninjas in Pajamas), a young team of Computer Engineers trying to make a living. (:
 Andrés Fernández, Hugo Zuleta, and Alejandro Lovera, from Universidad de los Andes, Colombia.
+
+License
+------------
+Copyright (C) 2013 NIP
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
