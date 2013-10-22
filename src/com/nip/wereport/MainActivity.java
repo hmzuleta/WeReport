@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.nip.protectblock.R;
+import com.nip.wereport.R;
 
 public class MainActivity extends FragmentActivity {
 

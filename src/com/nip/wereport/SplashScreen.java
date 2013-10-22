@@ -1,6 +1,6 @@
 package com.nip.wereport;
 
-import com.nip.protectblock.R;
+import com.nip.wereport.R;
 
 import android.app.Activity;
 import android.content.Intent;

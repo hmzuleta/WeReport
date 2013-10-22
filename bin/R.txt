@@ -104,6 +104,7 @@ int string common_signin_button_text 0x7f060011
 int string common_signin_button_text_long 0x7f060012
 int string hello_world 0x7f06001b
 int string ok 0x7f06001c
+int string pick_time 0x7f06001f
 int string report_prompt 0x7f06001e
 int style AppBaseTheme 0x7f090000
 int style AppTheme 0x7f090001
