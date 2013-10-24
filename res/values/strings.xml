@@ -6,6 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="ok">Reportar</string>
     <string name="cancel">Cancelar</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="refresh">Actualizar</string>
+    <string name="about">Acerca de...</string>
     
     <string name="report_prompt">Escoja motivo</string>
     <string-array name="report_arrays">
