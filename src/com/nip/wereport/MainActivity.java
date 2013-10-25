@@ -11,12 +11,19 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,7 +41,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.nip.wereport.R;
 
 public class MainActivity extends FragmentActivity {
 
@@ -43,13 +49,109 @@ public class MainActivity extends FragmentActivity {
 	 */
 	private LatLngBounds BOGOTA = new LatLngBounds(new LatLng(4.59354,-74.26964), new LatLng(4.79952,-73.98262));
 
+	private String[] drawerListViewItems;
+	private DrawerLayout drawerLayout;
+	private ListView drawerListView;
+	private ActionBarDrawerToggle actionBarDrawerToggle;
+	private CharSequence mDrawerTitle;
+	private CharSequence mTitle;
+
 	//-----------------------------------
 	// Constructor del fragment
 	//-----------------------------------
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		final Toast login = Toast.makeText(this, "No se ha implementado el login", Toast.LENGTH_SHORT);
+		final Toast refresh = Toast.makeText(this, "No se ha implementado el refresh", Toast.LENGTH_SHORT);
+		final Toast options = Toast.makeText(this, "No se ha implementado el refresh", Toast.LENGTH_SHORT);
+		final Toast about = Toast.makeText(this, "No se ha implementado el refresh", Toast.LENGTH_SHORT);
+
+		// get list items from strings.xml
+		drawerListViewItems = getResources().getStringArray(R.array.items);
+		// get ListView defined in activity_main.xml
+		drawerListView = (ListView) findViewById(R.id.left_drawer);
+
+		// Set the adapter for the list view
+		drawerListView.setAdapter(new ArrayAdapter<String>(this,
+				R.layout.drawer_listview_item, drawerListViewItems));
+
+		// App Icon 
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		actionBarDrawerToggle = new ActionBarDrawerToggle(
+				this,                  /* host Activity */
+				drawerLayout,         /* DrawerLayout object */
+				R.drawable.ic_launcher,  /* nav drawer icon to replace 'Up' caret */
+				R.string.drawer_open,  /* "open drawer" description */
+				R.string.drawer_close  /* "close drawer" description */
+				);
+
+		// Set actionBarDrawerToggle as the DrawerListener
+		drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+		getActionBar().setDisplayHomeAsUpEnabled(true); 
+		drawerListView.setOnItemClickListener(new OnItemClickListener()
+		{
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, final int pos, long id)
+			{
+				switch(pos) {
+				//TODO Iniciar sesion
+				case 1:
+					login.show();
+					break;
+					//TODO Actualizar mapa
+				case 2:
+					refresh.show();
+					break;
+					//TODO Actualizar mapa
+				case 3:
+					options.show();
+					break;
+				case 4:
+					about.show();
+					break;
+				default:
+				}
+				drawerLayout.closeDrawer(drawerListView);
+			}
+		});
+		// App Icon 
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mTitle = mDrawerTitle = getTitle();
+		actionBarDrawerToggle = new ActionBarDrawerToggle(
+				this,                  /* host Activity */
+				drawerLayout,         /* DrawerLayout object */
+				R.drawable.ic_launcher,  /* nav drawer icon to replace 'Up' caret */
+				R.string.drawer_open,  /* "open drawer" description */
+				R.string.drawer_close  /* "close drawer" description */
+				){
+
+			/** Called when a drawer has settled in a completely closed state. */
+			@Override
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle(mTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(mDrawerTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+		};
+
+		// Set actionBarDrawerToggle as the DrawerListener
+		drawerLayout.setDrawerListener(actionBarDrawerToggle);
+		drawerLayout.setMinimumWidth(new DisplayMetrics().widthPixels*50);
+		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
 		GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
 		final GoogleMap map = ((SupportMapFragment)  getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -57,12 +159,12 @@ public class MainActivity extends FragmentActivity {
 		map.setMyLocationEnabled(true);
 		//Desactiva la rotacion del mapa
 		map.getUiSettings().setRotateGesturesEnabled(false);
-		
+
 		//Toasts de bienvenida e instrucciones
 		Toast.makeText(this, "Bienvenido a WeReport",  Toast.LENGTH_LONG).show();
 		Toast bienvenida = Toast.makeText(this, "Toque una calle y luego la dirección para hacer un reporte",  Toast.LENGTH_LONG);
 		bienvenida.show();
-		
+
 		//----------------------------------
 		// Setup del click listener
 		//----------------------------------
@@ -92,11 +194,11 @@ public class MainActivity extends FragmentActivity {
 				{
 					Toast.makeText(getApplicationContext(), "Dirección no disponible para este punto", Toast.LENGTH_LONG).show();
 				}
-				
+
 			}
 		});
-		
-		
+
+
 		//----------------------------------
 		// Setup de la camara del mapa
 		//----------------------------------
@@ -110,51 +212,54 @@ public class MainActivity extends FragmentActivity {
 				map.setOnCameraChangeListener(null);
 			}
 		});
-		
-		
+
+
 		//-----------------------------------
 		// Creación del dialogo para reportar
 		//-----------------------------------	
 		AlertDialog.Builder builder = new AlertDialog.Builder( new ContextThemeWrapper(this, android.R.style.Theme_Holo));
 		builder.setMessage("¿Qué pasó?")
-				.setTitle("Reporte")	
-		
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-				           public void onClick(DialogInterface dialog, int id) {
-				        	   Toast.makeText(getApplicationContext(), "Se reportó la calle!", Toast.LENGTH_LONG).show();
-				           }
-				       })
-					.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-				           public void onClick(DialogInterface dialog, int id) {
-	
-				        	   dialog.cancel();
-				        	   
-				           }
-				       });
+		.setTitle("Reporte")	
+
+		.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Toast.makeText(getApplicationContext(), "Se reportó la calle!", Toast.LENGTH_LONG).show();
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+
+				dialog.cancel();
+
+			}
+		});
 		//-------------------------------------
 		// Creación del spinner para el dialogo
 		//-------------------------------------
 		Context mContext = this;
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.spinner1,null);
-		
+
 		Spinner s = (Spinner) layout.findViewById(R.id.spinner1);
-		
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.report_arrays, R.layout.spinner_item);		
+		System.out.println(s==null);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.report_arrays, R.layout.spinner_item);
 		s.setAdapter(adapter);
-		
+
 		builder.setView(layout);
-							    
+
 		final AlertDialog dialog = builder.create();
-		
+
 		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
-	        public void onInfoWindowClick(Marker marker) {
-	            dialog.show();
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				dialog.show();
 
-	        }
-	    });
-		
+			}
+		});
+
 	}
 
 	private Polyline crearPolyline(List<Address> a2, GoogleMap map) {
@@ -165,15 +270,15 @@ public class MainActivity extends FragmentActivity {
 
 		if(address.contains("-"))
 		{
-			
+
 		}
-		
+
 		//Saca "numCalle1 a numCalle2"
 		String[] addressSplit = address.split("-");
 		String addressA = null, addressB = null;
 		Polyline p = null;
 
-		
+
 		try {
 
 			//Saca "numCalle1" y "a numCalle2"
@@ -185,7 +290,7 @@ public class MainActivity extends FragmentActivity {
 			addressB=addressSplit[0]+"-"+addressSplit[2]+", Bogotá";
 			LatLng b = getLatLongFromAddress(addressB);
 
-			
+
 			System.out.println(addressA);
 			System.out.println(addressB);
 			p = map.addPolyline(new PolylineOptions().add(a,b).color(Color.BLUE));
@@ -193,7 +298,7 @@ public class MainActivity extends FragmentActivity {
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), "Procure tocar calles rectas", Toast.LENGTH_LONG).show();
 		}
-		
+
 		return p;
 	}
 
@@ -240,9 +345,9 @@ public class MainActivity extends FragmentActivity {
 				String city = addresses.get(0).getAddressLine(1);
 				String country = addresses.get(0).getAddressLine(2);
 				System.out.println(address+" - "+city+" - "+country);
-				
+
 				return addresses;
-				
+
 			} else {
 				Toast.makeText(this, "latitude and longitude are null",
 						Toast.LENGTH_LONG).show();
@@ -260,5 +365,15 @@ public class MainActivity extends FragmentActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @SuppressWarnings("rawtypes")
+		@Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Toast.makeText(MainActivity.this, ((TextView)view).getText(), Toast.LENGTH_LONG).show();
+            drawerLayout.closeDrawer(drawerListView);
+ 
+        }
+    }
 
 }

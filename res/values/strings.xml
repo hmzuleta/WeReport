@@ -6,6 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="ok">Reportar</string>
     <string name="cancel">Cancelar</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="refresh">Actualizar</string>
+    <string name="about">Acerca de…</string>
     
     <string name="report_prompt">Escoja motivo</string>
     <string-array name="report_arrays">
@@ -16,6 +19,16 @@
         <item>Disturbios</item>
         <item>Poca Iluminación</item>
     </string-array>
+    
+    <string-array name="items">
+        <item>Mi cuenta</item>
+        <item>Actualizar</item>
+        <item>Opciones</item>
+        <item>Acerca de…</item>
+    </string-array>
+ 
+    <string name="drawer_open">Abrir barra de navegación</string>
+    <string name="drawer_close">Cerrar barra de navegación</string>
     
     <string name="pick_time">¿A qué horas pasó?</string>
 
