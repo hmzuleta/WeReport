@@ -1,6 +1,5 @@
 package com.nip.wereport;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,14 +11,19 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -37,48 +41,118 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.nip.wereport.R;
 
-public class MainActivity extends FragmentActivity implements ExpandableListView.OnChildClickListener{
+public class MainActivity extends FragmentActivity {
 
 	/**
 	 * Constante para los límites geográficos de la cámara inicial; bogotá.
 	 */
 	private LatLngBounds BOGOTA = new LatLngBounds(new LatLng(4.59354,-74.26964), new LatLng(4.79952,-73.98262));
 
-	private SlidingMenu slidingMenu;
-	
-	private ExpandableListView sectionListView;
+	private String[] drawerListViewItems;
+	private DrawerLayout drawerLayout;
+	private ListView drawerListView;
+	private ActionBarDrawerToggle actionBarDrawerToggle;
+	private CharSequence mDrawerTitle;
+	private CharSequence mTitle;
 
 	//-----------------------------------
 	// Constructor del fragment
 	//-----------------------------------
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+		final Toast login = Toast.makeText(this, "No se ha implementado el login", Toast.LENGTH_SHORT);
+		final Toast refresh = Toast.makeText(this, "No se ha implementado el refresh", Toast.LENGTH_SHORT);
+		final Toast options = Toast.makeText(this, "No se ha implementado el refresh", Toast.LENGTH_SHORT);
+		final Toast about = Toast.makeText(this, "No se ha implementado el refresh", Toast.LENGTH_SHORT);
 
-		//Sliding Menu INIT
-		slidingMenu = new SlidingMenu(this);
-		slidingMenu.setMode(SlidingMenu.LEFT);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		slidingMenu.setFadeDegree(0.35f);
-		slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-		slidingMenu.setMenu(R.layout.slidingmenu);
-		sectionListView = new ExpandableListView(getApplicationContext());
+		// get list items from strings.xml
+		drawerListViewItems = getResources().getStringArray(R.array.items);
+		// get ListView defined in activity_main.xml
+		drawerListView = (ListView) findViewById(R.id.left_drawer);
+
+		// Set the adapter for the list view
+		drawerListView.setAdapter(new ArrayAdapter<String>(this,
+				R.layout.drawer_listview_item, drawerListViewItems));
+
+		// App Icon 
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		actionBarDrawerToggle = new ActionBarDrawerToggle(
+				this,                  /* host Activity */
+				drawerLayout,         /* DrawerLayout object */
+				R.drawable.ic_launcher,  /* nav drawer icon to replace 'Up' caret */
+				R.string.drawer_open,  /* "open drawer" description */
+				R.string.drawer_close  /* "close drawer" description */
+				);
+
+		// Set actionBarDrawerToggle as the DrawerListener
+		drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+		getActionBar().setDisplayHomeAsUpEnabled(true); 
+		drawerListView.setOnItemClickListener(new OnItemClickListener()
+		{
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, final int pos, long id)
+			{
+				switch(pos) {
+				//TODO Iniciar sesion
+				case 1:
+					login.show();
+					break;
+					//TODO Actualizar mapa
+				case 2:
+					refresh.show();
+					break;
+					//TODO Actualizar mapa
+				case 3:
+					options.show();
+					break;
+				case 4:
+					about.show();
+					break;
+				default:
+				}
+				drawerLayout.closeDrawer(drawerListView);
+			}
+		});
+		// App Icon 
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mTitle = mDrawerTitle = getTitle();
+		actionBarDrawerToggle = new ActionBarDrawerToggle(
+				this,                  /* host Activity */
+				drawerLayout,         /* DrawerLayout object */
+				R.drawable.ic_launcher,  /* nav drawer icon to replace 'Up' caret */
+				R.string.drawer_open,  /* "open drawer" description */
+				R.string.drawer_close  /* "close drawer" description */
+				){
+
+			/** Called when a drawer has settled in a completely closed state. */
+			@Override
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle(mTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(mDrawerTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+		};
+
+		// Set actionBarDrawerToggle as the DrawerListener
+		drawerLayout.setDrawerListener(actionBarDrawerToggle);
+		drawerLayout.setMinimumWidth(new DisplayMetrics().widthPixels*50);
+		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		List<Section> sectionList = createMenu();
-		SectionListAdapter sectionListAdapter = new SectionListAdapter(this, sectionList);
-        sectionListView.setAdapter(sectionListAdapter);
-        
-        sectionListView.setOnChildClickListener(this);
-        
-        int count = sectionListAdapter.getGroupCount();
-        for (int position = 0; position < count; position++) {
-            this.sectionListView.expandGroup(position);
-        }
+
+		GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
 		final GoogleMap map = ((SupportMapFragment)  getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 		//para que solo muestre a bogota
@@ -148,11 +222,13 @@ public class MainActivity extends FragmentActivity implements ExpandableListView
 		.setTitle("Reporte")	
 
 		.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				Toast.makeText(getApplicationContext(), "Se reportó la calle!", Toast.LENGTH_LONG).show();
 			}
 		})
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int id) {
 
 				dialog.cancel();
@@ -167,8 +243,8 @@ public class MainActivity extends FragmentActivity implements ExpandableListView
 		View layout = inflater.inflate(R.layout.spinner1,null);
 
 		Spinner s = (Spinner) layout.findViewById(R.id.spinner1);
-
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.report_arrays, R.layout.spinner_item);		
+		System.out.println(s==null);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.report_arrays, R.layout.spinner_item);
 		s.setAdapter(adapter);
 
 		builder.setView(layout);
@@ -177,6 +253,7 @@ public class MainActivity extends FragmentActivity implements ExpandableListView
 
 		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
+			@Override
 			public void onInfoWindowClick(Marker marker) {
 				dialog.show();
 
@@ -184,61 +261,6 @@ public class MainActivity extends FragmentActivity implements ExpandableListView
 		});
 
 	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ( keyCode == KeyEvent.KEYCODE_MENU ) {
-			this.slidingMenu.toggle();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public void onBackPressed() {
-		if ( slidingMenu.isMenuShowing()) {
-			slidingMenu.toggle();
-		}
-		else {
-			super.onBackPressed();
-		}
-	}
-
-	private List<Section> createMenu() {
-		List<Section> sectionList = new ArrayList<Section>();
-
-		Section oDemoSection = new Section("Options");
-		oDemoSection.addSectionItem(101,"Opciones", "slidingmenu_friends");
-		oDemoSection.addSectionItem(102, "Actualizar mapa", "slidingmenu_airport");
-
-		Section oGeneralSection = new Section("Acerca de");
-		oGeneralSection.addSectionItem(201, "Quiénes somos", "slidingmenu_settings");
-		oGeneralSection.addSectionItem(202, "Licencias", "slidingmenu_rating");
-
-		sectionList.add(oDemoSection);
-		sectionList.add(oGeneralSection);
-		return sectionList;
-	}
-
-	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
-		switch ((int)id) {
-		case 101:
-			//TODO
-			break;
-		case 102:
-			//TODO
-			break;
-		case 201:
-			//TODO
-			break;
-		case 202:
-			//TODO
-			break;
-		}
-		return false;
-	}
-
 
 	private Polyline crearPolyline(List<Address> a2, GoogleMap map) {
 
@@ -337,22 +359,21 @@ public class MainActivity extends FragmentActivity implements ExpandableListView
 		}
 	}
 
-
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			this.slidingMenu.toggle();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+	
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @SuppressWarnings("rawtypes")
+		@Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Toast.makeText(MainActivity.this, ((TextView)view).getText(), Toast.LENGTH_LONG).show();
+            drawerLayout.closeDrawer(drawerListView);
+ 
+        }
+    }
 
 }
